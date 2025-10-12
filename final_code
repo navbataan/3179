@@ -19,7 +19,6 @@
 
   "layer": [
     {
-      // Base map: population density
       "data": {
         "url": "https://raw.githubusercontent.com/navbataan/3179/main/green_space_vic.json",
         "format": {"type": "topojson", "feature": "green_space_vic"}
@@ -44,7 +43,6 @@
       }
     },
     {
-      // Overlay circles: green space percentage
       "data": {
         "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids.csv"
       },

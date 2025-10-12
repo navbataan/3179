@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Victoria: Population Density and Green Space (2024)</title>
+
+  <!-- Vega & Vega-Lite libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 20px;
+      color: #003366;
+    }
+    #vis {
+      margin: 20px auto;
+      width: 90%;
+      max-width: 900px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Melbourne and Surroundings: Population Density and Green Space (2024)</h1>
+  <div id="vis"></div>
+
+  <script type="text/javascript">
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 800,
+      "height": 700,
+      "projection": {
+        "type": "mercator",
+        "center": [145.0, -37.4],
+        "scale": 50000,
+        "translate": [400, 50]
+      },
+      "layer": [
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/navbataan/3179/main/green_space_vic.json",
+            "format": {"type": "topojson", "feature": "green_space_vic"}
+          },
+          "transform": [{"filter": "datum.properties.state_name_2021 == 'Victoria'"}],
+          "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
+          "encoding": {
+            "color": {
+              "field": "properties.pop_density_2024_people_per_km2",
+              "type": "quantitative",
+              "title": "Population Density (people/km²)",
+              "scale": {"scheme": "blues"}
+            },
+            "tooltip": [
+              {"field": "properties.lga_name_2024", "title": "Local Government Area"},
+              {"field": "properties.pop_density_2024_people_per_km2",
+               "title": "Population Density (people/km²)",
+               "format": ".0f"}
+            ]
+          }
+        },
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids.csv"
+          },
+          "transform": [{"filter": "datum.state_name == 'Victoria'"}],
+          "mark": {
+            "type": "circle",
+            "color": "darkgreen",
+            "stroke": "white",
+            "strokeWidth": 0.7,
+            "opacity": 0.75
+          },
+          "encoding": {
+            "longitude": {"field": "X", "type": "quantitative"},
+            "latitude": {"field": "Y", "type": "quantitative"},
+            "size": {
+              "field": "Green_Pct",
+              "type": "quantitative",
+              "title": "Green Space (%)",
+              "scale": {"domain": [0, 100], "range": [30, 1500]},
+              "legend": {"symbolFillColor": "darkgreen"}
+            },
+            "tooltip": [
+              {"field": "lga_name_2", "title": "Local Government Area"},
+              {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"}
+            ]
+          }
+        }
+      ],
+      "config": {
+        "background": "white",
+        "view": {"stroke": "transparent"},
+        "legend": {"titleFontSize": 12, "labelFontSize": 10, "orient": "right"}
+      }
+    };
+
+    vegaEmbed('#vis', spec).then(console.log).catch(console.error);
+  </script>
+
+  <p style="color:#555; font-size:0.9em;">Source: ABS (2024); CSIRO Green Space Index</p>
+</body>
+</html>

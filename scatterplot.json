@@ -1,0 +1,94 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": {
+      "text": "Green Space (%) vs Population Density (people/km²) – Victoria LGAs",
+      "subtitle": "Each dot represents a Victorian Local Government Area (2024)",
+      "fontSize": 18,
+      "anchor": "middle"
+    },
+    "width": 700,
+    "height": 500,
+    "data": {
+      "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"
+    },
+    "transform": [
+      {"filter": "datum.state_name == 'Victoria'"},
+      {"filter": "isValid(datum.Green_Pct) && datum.Green_Pct > 0"}
+    ],
+    "params": [
+      {
+        "name": "Region",
+        "bind": {
+          "input": "select",
+          "options": ["All", "Metropolitan", "Regional"],
+          "labels": ["All Victoria", "Metropolitan", "Regional"],
+          "name": "Filter by Region: "
+        },
+        "value": "All"
+      }
+    ],
+    "transform": [
+      {
+        "filter": "Region == 'All' || datum.Region == Region"
+      }
+    ],
+    "layer": [
+      {
+        "mark": {
+          "type": "circle",
+          "color": "#006400",
+          "opacity": 0.75,
+          "size": 250
+        },
+        "encoding": {
+          "x": {
+            "field": "pop_densit",
+            "type": "quantitative",
+            "title": "Population Density (people/km²)",
+            "scale": {"type": "linear"},
+            "axis": {"grid": true}
+          },
+          "y": {
+            "field": "Green_Pct",
+            "type": "quantitative",
+            "title": "Green Space (%)",
+            "axis": {"grid": true}
+          },
+          "tooltip": [
+            {"field": "lga_name_2", "title": "Local Government Area"},
+            {"field": "pop_densit", "title": "Population Density (people/km²)", "format": ".0f"},
+            {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"},
+            {"field": "Region", "title": "Region"}
+          ]
+        }
+      },
+      {
+        "mark": {"type": "rule", "color": "grey", "strokeDash": [4, 4], "size": 2},
+        "encoding": {
+          "y": {"datum": 20},
+          "tooltip": {"value": "Approximate average green space (20%)"}
+        }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "text": "Average green space ~20%",
+          "color": "grey",
+          "fontSize": 12,
+          "align": "left",
+          "dx": 5,
+          "dy": -5
+        },
+        "encoding": {
+          "x": {"datum": 50},
+          "y": {"datum": 20}
+        }
+      }
+    ],
+    "config": {
+      "background": "white",
+      "view": {"stroke": "transparent"},
+      "axis": {"titleFontSize": 13, "labelFontSize": 11}
+    }
+  }
+  

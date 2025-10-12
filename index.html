@@ -1,52 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Victoria: Population Density and Green Space (2024)</title>
-
-  <!-- Vega & Vega-Lite libraries -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Victoria: Green Space and Population Density</title>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-      text-align: center;
+      margin: 40px;
+      background-color: #fafafa;
+      color: #333;
     }
     h1 {
-      margin-top: 20px;
-      color: #003366;
+      text-align: center;
     }
-    #vis {
-      margin: 20px auto;
-      width: 90%;
+    .vis-container {
+      margin: 40px auto;
       max-width: 900px;
+      border: 1px solid #ddd;
       background: white;
-      padding: 15px;
-      border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 20px;
     }
   </style>
 </head>
 
 <body>
-  <h1>Melbourne and Surroundings: Population Density and Green Space (2024)</h1>
-  <div id="vis"></div>
+  <h1>Victoria: Green Space and Population Density (2024)</h1>
+
+  <!-- Map Visualisation -->
+  <div class="vis-container" id="map"></div>
+
+  <!-- Scatter Plot Visualisation -->
+  <div class="vis-container" id="scatter"></div>
 
   <script type="text/javascript">
-    const spec = {
+    // --- Map spec ---
+    const mapSpec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
       "width": 800,
       "height": 700,
+      "title": {
+        "text": "Victoria: Population Density and Green Space (2024)",
+        "subtitle": "Choropleth = population density (people/km²), Circles = green space (%)",
+        "fontSize": 18,
+        "anchor": "middle"
+      },
       "projection": {
         "type": "mercator",
-        "center": [145.0, -37.4],
+        "center": [145.3, -37.7],
         "scale": 50000,
-        "translate": [400, 50]
+        "translate": [400, 350]
       },
       "layer": [
         {
@@ -62,54 +69,69 @@
               "type": "quantitative",
               "title": "Population Density (people/km²)",
               "scale": {"scheme": "blues"}
-            },
-            "tooltip": [
-              {"field": "properties.lga_name_2024", "title": "Local Government Area"},
-              {"field": "properties.pop_density_2024_people_per_km2",
-               "title": "Population Density (people/km²)",
-               "format": ".0f"}
-            ]
+            }
           }
         },
         {
           "data": {
-            "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids.csv"
+            "url": "https://raw.githubusercontent.com/navbataan/3179/main/vic_centroids_clean.csv"
           },
           "transform": [{"filter": "datum.state_name == 'Victoria'"}],
-          "mark": {
-            "type": "circle",
-            "color": "darkgreen",
-            "stroke": "white",
-            "strokeWidth": 0.7,
-            "opacity": 0.75
-          },
+          "mark": {"type": "circle", "color": "#006400", "opacity": 0.75, "size": 250},
           "encoding": {
             "longitude": {"field": "X", "type": "quantitative"},
             "latitude": {"field": "Y", "type": "quantitative"},
-            "size": {
-              "field": "Green_Pct",
-              "type": "quantitative",
-              "title": "Green Space (%)",
-              "scale": {"domain": [0, 100], "range": [30, 1500]},
-              "legend": {"symbolFillColor": "darkgreen"}
-            },
             "tooltip": [
               {"field": "lga_name_2", "title": "Local Government Area"},
-              {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"}
+              {"field": "Green_Pct", "title": "Green Space (%)"},
+              {"field": "pop_densit", "title": "Population Density (people/km²)"}
             ]
           }
         }
+      ]
+    };
+
+    // --- Scatter Plot spec ---
+    const scatterSpec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": {
+        "text": "Green Space (%) vs Population Density (people/km²) – Victoria LGAs",
+        "subtitle": "Each dot represents a Victorian Local Government Area (2024)",
+        "fontSize": 18,
+        "anchor": "middle"
+      },
+      "width": 700,
+      "height": 500,
+      "data": {
+        "url": "https://raw.githubusercontent.com/navbataan/3179/main/vic_centroids_clean.csv"
+      },
+      "transform": [
+        {"filter": "datum.state_name == 'Victoria'"},
+        {"filter": "isValid(datum.Green_Pct) && datum.Green_Pct > 0"}
       ],
-      "config": {
-        "background": "white",
-        "view": {"stroke": "transparent"},
-        "legend": {"titleFontSize": 12, "labelFontSize": 10, "orient": "right"}
+      "mark": {"type": "circle", "color": "#006400", "size": 250, "opacity": 0.7},
+      "encoding": {
+        "x": {
+          "field": "pop_densit",
+          "type": "quantitative",
+          "title": "Population Density (people/km²)"
+        },
+        "y": {
+          "field": "Green_Pct",
+          "type": "quantitative",
+          "title": "Green Space (%)"
+        },
+        "tooltip": [
+          {"field": "lga_name_2", "title": "Local Government Area"},
+          {"field": "pop_densit", "title": "Population Density (people/km²)", "format": ".0f"},
+          {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"}
+        ]
       }
     };
 
-    vegaEmbed('#vis', spec).then(console.log).catch(console.error);
+    // Embed both charts
+    vegaEmbed('#map', mapSpec, {actions: false});
+    vegaEmbed('#scatter', scatterSpec, {actions: false});
   </script>
-
-  <p style="color:#555; font-size:0.9em;">Source: ABS (2024); CSIRO Green Space Index</p>
 </body>
 </html>

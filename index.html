@@ -91,11 +91,10 @@
       ]
     };
 
-    // --- Scatter Plot spec ---
     const scatterSpec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
       "title": {
-        "text": "Green Space (%) vs Population Density (people/km²) – Victoria LGAs",
+        "text": "Green Space (%) vs Population Density (people/km²) Victoria LGAs",
         "subtitle": "Each dot represents a Victorian Local Government Area (2024)",
         "fontSize": 18,
         "anchor": "middle"
@@ -129,7 +128,6 @@
       }
     };
 
-    // Embed both charts
     vegaEmbed('#map', mapSpec, {actions: false});
     vegaEmbed('#scatter', scatterSpec, {actions: false});
   </script>

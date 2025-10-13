@@ -122,7 +122,7 @@
         {"filter": "isValid(datum.Green_Pct) && datum.Green_Pct > 0"},
         {"filter": "datum.state_name == 'Victoria'"},
         {
-          "calculate": "datum.Green_Pct > 45 ? datum.lga_name_2 : ''",
+          "calculate": "(datum.Green_Pct >= 45 && datum.lga_name_2 != null) ? datum.lga_name_2 : ''",
           "as": "label"
         }
       ],
@@ -149,7 +149,7 @@
               "field": "pop_densit",
               "type": "quantitative",
               "title": "Population Density (people/km²)",
-              "scale": {"type": "log"}
+              "scale": {"type": "linear"}
             },
             "y": {
               "field": "Green_Pct",
@@ -166,7 +166,13 @@
         },
         {
           "mark": {"type": "text", "align": "left", "dx": 7, "dy": -5, "fontSize": 9, "color": "black"},
-          "encoding": {"text": {"field": "label"}}
+          "encoding": {
+            "text": {"field": "label"},
+            "opacity": {
+              "condition": {"test": "datum.label != ''", "value": 1},
+              "value": 0
+            }
+          }
         }
       ]
     };

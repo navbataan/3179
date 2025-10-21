@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
-    "text": "Top and Bottom Victorian LGAs by Green Space (%)",
+    "text": "Top & Bottom Victorian LGAs by Population Density (people/km^2)",
     "subtitle": "Grouped by population density category (2024)",
     "anchor": "start",
     "fontSize": 16
@@ -14,11 +14,11 @@
   "transform": [
     {
       "calculate": "datum.pop_densit < 1000 ? 'Low Density' : datum.pop_densit < 3000 ? 'Medium Density' : 'High Density'",
-      "as": "DensityGroup"
+      "as": "Density_Group"
     },
     {
       "window": [{"op": "rank", "as": "rank"}],
-      "sort": [{"field": "Green_Pct", "order": "descending"}]
+      "sort": [{"field": "pop_densit", "order": "descending"}]
     },
     {
       "filter": "datum.rank <= 10 || datum.rank >= (datum.total - 10)"
@@ -37,9 +37,9 @@
       "axis": {"labelFontSize": 10}
     },
     "x": {
-      "field": "Green_Pct",
+      "field": "pop_densit",
       "type": "quantitative",
-      "title": "Green Space (%)",
+      "title": "Population Density (people/km^2)",
       "axis": {"grid": true}
     },
     "color": {

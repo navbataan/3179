@@ -16,21 +16,20 @@
 
   <style>
     :root{
-      --bg:#0e0f12;        /* subtle dark backdrop (plays nicely with your inspiration) */
+      --bg:#0e0f12;
       --panel:#ffffff;
       --ink:#1a1a1a;
       --ink-sub:#555;
-      --accent:#2f855a;    /* soft green accent */
+      --accent:#2f855a;
       --radius:16px;
       --shadow:0 10px 24px rgba(0,0,0,.12);
     }
 
-    body{ background:var(--bg); color:#111; font:16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; margin:0; }
+    body{ background:var(--bg); color:#111; font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji"; margin:0; }
     .wrap{ max-width:1120px; margin:0 auto; padding:24px 16px 80px; }
 
-    /* Header */
     .hero{
-      background:linear-gradient(180deg, #1a202c 0%, #0e0f12 100%);
+      background:linear-gradient(180deg,#1a202c 0%,#0e0f12 100%);
       border-radius:var(--radius);
       padding:28px 24px;
       margin:0 0 24px;
@@ -40,7 +39,6 @@
     .hero h1{ margin:0 0 6px; font-size:2rem; letter-spacing:.2px; }
     .hero p{ margin:.25rem 0 0; color:#d0d4db; }
 
-    /* Card container for every two-column block */
     .card{
       background:var(--panel);
       border-radius:var(--radius);
@@ -49,12 +47,10 @@
       margin:0 0 24px;
     }
 
-    /* Text side */
     .textbox h2{ margin:0 0 8px; color:var(--ink); }
     .textbox p{ color:var(--ink-sub); margin:8px 0; }
     .kicker{ text-transform:uppercase; letter-spacing:.08em; color:var(--accent); font-weight:700; font-size:.78rem; }
 
-    /* Chart containers (so Vega-Embed fills them nicely) */
     .chart{
       width:100%;
       min-height:360px;
@@ -64,11 +60,9 @@
       border:1px solid #eee;
     }
 
-    /* Small helper to place two charts side-by-side inside one column */
     .twins{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    @media (max-width: 640px){ .twins{ grid-template-columns:1fr; } }
+    @media (max-width:640px){ .twins{ grid-template-columns:1fr; } }
 
-    /* Footer notes */
     .small{ font-size:.86rem; color:#999; }
     a{ color:#2463eb; text-decoration:none; }
     a:hover{ text-decoration:underline; }
@@ -77,89 +71,78 @@
 <body>
   <div class="wrap">
 
-    <!-- Title / Intro -->
     <header class="hero">
       <h1>Green Space vs. Population Density in Melbourne & Surrounds (2024)</h1>
       <p>Exploring how access to green space varies across metropolitan Melbourne and nearby LGAs, and how that relates to population density.</p>
     </header>
 
-    <!-- SECTION 1: Map (hero). Two-column: map + context -->
     <section class="card">
       <div class="pure-g">
         <div class="pure-u-1 pure-u-md-1-2" style="padding:6px;">
-          <div id="chart-map" class="chart" aria-label="Choropleth/Proportional map"></div>
+          <div id="chart-map" class="chart"></div>
         </div>
         <div class="pure-u-1 pure-u-md-1-2 textbox" style="padding:6px;">
           <div class="kicker">1 · Where are we?</div>
           <h2>Melbourne"s Green Space at a Glance</h2>
-          <p>Use this map to orient yourself. Darker tones indicate higher population density; circle size/colour (or choropleth, depending on your spec) encode green space share by LGA. Hover or tap to see the exact values.</p>
-          <p>This establishes the spatial context before we dive into relationships and distributions.</p>
+          <p>Darker tones indicate higher population density; circle size/colour encode green space share by LGA. Hover to see exact values.</p>
+          <p>This sets up the spatial context before we explore relationships and distributions.</p>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 2: Relationship (scatter). Text + chart -->
     <section class="card">
       <div class="pure-g">
         <div class="pure-u-1 pure-u-md-1-2 textbox" style="padding:6px;">
           <div class="kicker">2 · Relationship</div>
           <h2>Do Denser Areas Have Less Green?</h2>
-          <p>The scatter plot relates <em>population density</em> (x) to <em>green space %</em> (y) for each LGA. A fitted line or LOESS (optional) can help reveal the overall trend.</p>
-          <p>Look for clusters (inner-city vs outer suburbs), leverage points, and heteroscedasticity (spread changing with density). This frames the key narrative tension.</p>
+          <p>The scatter plot relates population density (x) to green space % (y) for each LGA. Look for clusters and outliers to interpret the trend.</p>
         </div>
         <div class="pure-u-1 pure-u-md-1-2" style="padding:6px;">
-          <div id="chart-scatter" class="chart" aria-label="Scatter plot"></div>
+          <div id="chart-scatter" class="chart"></div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 3: Extremes (top/bottom lists). Graphs side-by-side in the LEFT column -->
     <section class="card">
       <div class="pure-g">
         <div class="pure-u-1 pure-u-md-1-2" style="padding:6px;">
           <div class="twins">
-            <div id="chart-bars-top" class="chart" aria-label="Top LGAs by green space (bar)"></div>
-            <div id="chart-bars-bottom" class="chart" aria-label="Bottom LGAs by green space (bar)"></div>
+            <div id="chart-bars-top" class="chart"></div>
+            <div id="chart-bars-bottom" class="chart"></div>
           </div>
         </div>
         <div class="pure-u-1 pure-u-md-1-2 textbox" style="padding:6px;">
           <div class="kicker">3 · Who has the most vs least?</div>
           <h2>Leaders & Laggards</h2>
-          <p>Side-by-side horizontal bars spotlight the LGAs with the highest and lowest green space. Pair this with annotations calling out notable outliers or policy-relevant cases.</p>
-          <p>If you prefer, stack these two bar charts vertically on small screens (this template already does that automatically).</p>
+          <p>Horizontal bars show LGAs with the highest and lowest green space. Compare with population density rankings for deeper insight.</p>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 4: Distribution (box + histogram). Charts stacked inside LEFT column -->
     <section class="card">
       <div class="pure-g">
         <div class="pure-u-1 pure-u-md-1-2" style="padding:6px;">
           <div class="twins" style="grid-template-columns:1fr; gap:12px;">
-            <div id="chart-box" class="chart" aria-label="Box plot distribution"></div>
-            <div id="chart-hist" class="chart" aria-label="Histogram distribution"></div>
+            <div id="chart-box" class="chart"></div>
+            <div id="chart-hist" class="chart"></div>
           </div>
         </div>
         <div class="pure-u-1 pure-u-md-1-2 textbox" style="padding:6px;">
           <div class="kicker">4 · How is it distributed?</div>
           <h2>Spread, Skew & Typical Values</h2>
-          <p>The box plot summarises median and spread of green space across LGAs; the histogram shows the shape (e.g., skew towards lower or higher shares). This helps conclude the story with a population-level view.</p>
-          <p class="small">Data source credits and notes can go here. Replace this text with your own citations or methodology bullets.</p>
+          <p>The box plot summarises median and spread; the histogram shows the overall shape. Together they conclude the story with a population-level view.</p>
+          <p class="small">Data sources: ABS, Victorian open data, author"s calculations.</p>
         </div>
       </div>
     </section>
 
-    <p class="small" style="text-align:center;">Built with <a href="https://purecss.io/">Pure.css</a> and <a href="https://vega.github.io/vega-lite/">Vega-Lite</a>. Replace the sample text and paste your specs below.</p>
+    <p class="small" style="text-align:center;">Built with <a href="https://purecss.io/">Pure.css</a> and <a href="https://vega.github.io/vega-lite/">Vega-Lite</a>.</p>
   </div>
 
   <script>
-    // ============================
-    // Paste your Vega-Lite specs
-    // ============================
-    // Example:
-    // const MAP_SPEC = { "$schema":"https://vega.github.io/schema/vega-lite/v5.json", ... };
+  /* ---------- All your Vega-Lite specs ---------- */
 
-    const MAP_SPEC      = {
+  const MAP_SPEC = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": 800,
   "height": 700,
@@ -239,7 +222,7 @@
     "legend": {"titleFontSize": 12, "labelFontSize": 10, "orient": "right"}
   }
 };
-    const SCATTER_SPEC  = {
+  const SCATTER_SPEC = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
     "text": "Green Space (%) vs Population Density (people/km²) for Victoria LGAs",
@@ -328,7 +311,7 @@
     "axis": {"titleFontSize": 13, "labelFontSize": 11}
   }
 };
-    const BARS_TOP_SPEC = {
+  const BARS_TOP_SPEC = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
     "text": "Top and Bottom Victorian LGAs by Green Space (%)",
@@ -386,8 +369,7 @@
     ]
   }
 };
-
-    const BARS_BOT_SPEC = {
+  const BARS_BOT_SPEC = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
     "text": "Top & Bottom Victorian LGAs by Population Density (people/km^2)",
@@ -445,7 +427,7 @@
     ]
   }
 };
-    const BOX_SPEC      = {
+  const BOX_SPEC = {
     "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
     "title": "Green Space Distribution by Density Group (Victoria, 2024)",
     "data": {
@@ -587,7 +569,7 @@
       "axis": {"labelFontSize": 10, "titleFontSize": 11}
     }
   };
-    const HIST_SPEC     = {
+  const HIST_SPEC = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {"text": "Distribution of Green Space Across Victorian LGAs"},
   "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"},
@@ -602,33 +584,17 @@
   "height": 400
 };
 
-    // Common embed options
-    const opts = { actions:false, renderer:"canvas", tooltip:true };
 
-    // Render charts (only if a spec is provided)
-    const tryEmbed = (el, spec) => {
-      if (spec && Object.keys(spec).length){
-        vegaEmbed(el, spec, opts).catch(console.error);
-      } else {
-        // Light placeholder if spec not yet added
-        const node = document.querySelector(el);
-        if (node){
-          node.style.display = "grid";
-          node.style.placeItems = "center";
-          node.style.color = "#888";
-          node.style.fontSize = "14px";
-          node.style.background = "#f6f8fb";
-          node.innerHTML = "Paste your Vega-Lite spec in <code>" + el.replace('#','').toUpperCase() + "</code>";
-        }
-      }
-    };
+  const opts = { actions:false, renderer:"canvas", tooltip:true };
+  const tryEmbed = (el, spec) =>
+    vegaEmbed(el, spec, opts).catch(console.error);
 
-    tryEmbed("#chart-map", MAP_SPEC);
-    tryEmbed("#chart-scatter", SCATTER_SPEC);
-    tryEmbed("#chart-bars-top", BARS_TOP_SPEC);
-    tryEmbed("#chart-bars-bottom", BARS_BOT_SPEC);
-    tryEmbed("#chart-box", BOX_SPEC);
-    tryEmbed("#chart-hist", HIST_SPEC);
+  tryEmbed("#chart-map", MAP_SPEC);
+  tryEmbed("#chart-scatter", SCATTER_SPEC);
+  tryEmbed("#chart-bars-top", BARS_TOP_SPEC);
+  tryEmbed("#chart-bars-bottom", BARS_BOT_SPEC);
+  tryEmbed("#chart-box", BOX_SPEC);
+  tryEmbed("#chart-hist", HIST_SPEC);
   </script>
 </body>
 </html>

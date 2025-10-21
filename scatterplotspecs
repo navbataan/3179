@@ -1,0 +1,58 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Top and Bottom Victorian LGAs by Green Space (%)",
+    "subtitle": "Grouped by population density category (2024)",
+    "anchor": "start",
+    "fontSize": 16
+  },
+  "width": 500,
+  "height": 500,
+  "data": {
+    "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"
+  },
+  "transform": [
+    {
+      "calculate": "datum.pop_densit < 1000 ? 'Low Density' : datum.pop_densit < 3000 ? 'Medium Density' : 'High Density'",
+      "as": "DensityGroup"
+    },
+    {
+      "window": [{"op": "rank", "as": "rank"}],
+      "sort": [{"field": "Green_Pct", "order": "descending"}]
+    },
+    {
+      "filter": "datum.rank <= 10 || datum.rank >= (datum.total - 10)"
+    }
+  ],
+  "mark": {
+    "type": "bar",
+    "opacity": 1.0
+  },
+  "encoding": {
+    "y": {
+      "field": "lga_name_2",
+      "type": "ordinal",
+      "sort": "-x",
+      "title": "Local Government Area",
+      "axis": {"labelFontSize": 10}
+    },
+    "x": {
+      "field": "Green_Pct",
+      "type": "quantitative",
+      "title": "Green Space (%)",
+      "axis": {"grid": true}
+    },
+    "color": {
+      "field": "Density_Group",
+      "type": "nominal",
+      "title": "Density Category",
+      "scale": {"range": ["#e8f5e9", "#81c784", "#1b5e20"]}
+    },
+    "tooltip": [
+      {"field": "lga_name_2", "title": "LGA"},
+      {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"},
+      {"field": "pop_densit", "title": "Population Density (people/km²)", "format": ",.0f"},
+      {"field": "Density_Group", "title": "Density Category"}
+    ]
+  }
+}

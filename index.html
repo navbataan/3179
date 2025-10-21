@@ -44,6 +44,22 @@
       overflow: hidden;
       width: 100%;
     }
+    .vis-pair {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .vis-pair .card {
+      flex: 1;
+      min-width: 420px;
+      background: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      padding: 10px;
+    }
   </style>
 </head>
 
@@ -75,10 +91,17 @@
 
   <section class="section">
     <div class="text">
-      <h2>Ranking of the Melbourne Suburbs</h2>
-      <p>This bar chart ranks LGAs by green space percentage. Low-density areas such as Mornington Peninsula dominate, while inner-city councils like Port Phillip appear lowest.</p>
+      <h2>Comparing Green Space and Density Rankings</h2>
+      <p>
+        These two charts rank Victorian LGAs by <b>green space percentage</b> and <b>population density</b>.
+        They highlight how inner-city regions, while densely populated, tend to have the least vegetation,
+        whereas regional areas feature more abundant green space.
+      </p>
     </div>
-    <div class="vis card" id="bar"></div>
+    <div class="vis-pair">
+      <div class="card" id="bar"></div>
+      <div class="card" id="density"></div>
+    </div>
   </section>
 
   <section class="section reverse">
@@ -91,61 +114,94 @@
 
   <script>
     const mapSpec = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "width": 500, "height": 600,
-      "title": {"text": "Melbourne and Surroundings: Population Density and Green Space (2024)",
-        "subtitle": "Choropleth = population density (people/km²), Circles = green space (%)",
-        "fontSize": 20, "anchor": "middle", "offset": 10},
-      "projection": {"type": "mercator","center": [145.0, -37.5],"scale": 55000,"translate": [400, 50]},
-      "layer": [
-        {
-          "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/green_space_vic.json",
-                   "format": {"type": "topojson","feature": "green_space_vic"}},
-          "transform": [{"filter": "datum.properties.state_name_2021 == 'Victoria'"}],
-          "mark": {"type": "geoshape","stroke": "white","strokeWidth": 0.5},
-          "encoding": {
-            "color": {
-              "field": "properties.pop_density_2024_people_per_km2",
-              "type": "quantitative","title": "Population Density (people/km²)",
-              "scale": {"range": ["#e8f5e9","#81c784","#1b5e20"]}
-            },
-            "tooltip": [
-              {"field": "properties.lga_name_2024","title": "Local Government Area"},
-              {"field": "properties.pop_density_2024_people_per_km2","title": "Population Density (people/km²)","format": ".0f"}
-            ]
-          }
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 'container',
+  "height": 700,
+  "title": {
+    "text": "Melbourne and Surroundings: Population Density and Green Space (2024)",
+    "subtitle": "Choropleth = population density (people/km²), Circles = green space (%)",
+    "fontSize": 20,
+    "anchor": "middle",
+    "offset": 10
+  },
+
+  "projection": {
+    "type": "mercator",
+    "center": [145.0, -37.5], 
+    "scale": 55000,             
+    "translate": [400, 50]
+  },
+
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/navbataan/3179/main/green_space_vic.json",
+        "format": {"type": "topojson", "feature": "green_space_vic"}
+      },
+      "transform": [{"filter": "datum.properties.state_name_2021 == 'Victoria'"}],
+      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
+      "encoding": {
+        "color": {
+          "field": "properties.pop_density_2024_people_per_km2",
+          "type": "quantitative",
+          "title": "Population Density (people/km²)",
+          "scale": {"scheme": "blues"}
         },
-        {
-          "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids.csv"},
-          "transform": [{"filter": "datum.state_name == 'Victoria'"}],
-          "mark": {"type": "circle","color": "#2e7d32","stroke": "white","strokeWidth": 1.0,"opacity": 0.75},
-          "encoding": {
-            "longitude": {"field": "X"},
-            "latitude": {"field": "Y"},
-            "size": {"field": "Green_Pct","type": "quantitative","title": "Green Space (%)",
-              "scale": {"domain": [0, 100],"range": [30, 1500]},
-              "legend": {"symbolFillColor": "#2e7d32", "titleFontSize": 12, "labelFontSize": 10, "orient": "bottom", "direction": "horizontal", "gradientLength": 300
-          }},
-            "tooltip": [
-              {"field": "lga_name_2","title": "Local Government Area"},
-              {"field": "Green_Pct","title": "Green Space (%)","format": ".1f"}
-            ]
+        "tooltip": [
+          {"field": "properties.lga_name_2024", "title": "Local Government Area"},
+          {
+            "field": "properties.pop_density_2024_people_per_km2",
+            "title": "Population Density (people/km²)",
+            "format": ".0f"
           }
-        }
-      ]
-    };
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids.csv"
+      },
+      "transform": [{"filter": "datum.state_name == 'Victoria'"}],
+      "mark": {
+        "type": "circle",
+        "color": "darkgreen",
+        "stroke": "white",
+        "strokeWidth": 0.7,
+        "opacity": 0.75
+      },
+      "encoding": {
+        "longitude": {"field": "X", "type": "quantitative"},
+        "latitude": {"field": "Y", "type": "quantitative"},
+        "size": {
+          "field": "Green_Pct",
+          "type": "quantitative",
+          "title": "Green Space (%)",
+          "scale": {"domain": [0, 100], "range": [30, 1500]},
+          "legend": {"symbolFillColor": "darkgreen"}
+        },
+        "tooltip": [
+          {"field": "lga_name_2", "title": "Local Government Area"},
+          {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"}
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "background": "white",
+    "view": {"stroke": "transparent"},
+    "legend": {"titleFontSize": 12, "labelFontSize": 10, "orient": "right"}
+  }
+}
+;
 
     const scatterSpec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
       "title": {"text": "Green Space (%) vs Population Density (people/km²) for Victoria LGAs",
         "subtitle": "Each dot represents a Victorian Local Government Area (2024)",
         "fontSize": 18,"anchor": "middle"},
-      "width": 600,"height": 500,
+      "width": '600',"height": 500,
       "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"},
-      "transform": [
-        {"filter": "datum.state_name == 'Victoria'"},
-        {"filter": "isValid(datum.Green_Pct) && datum.Green_Pct > 0"}
-      ],
       "params": [{
         "name": "Region",
         "bind": {"input": "select","options": ["All","Metropolitan","Regional"],
@@ -178,34 +234,91 @@
     };
 
     const barSpec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Top and Bottom Victorian LGAs by Green Space (%)",
+    "subtitle": "Grouped by population density category (2024)",
+    "anchor": "start",
+    "fontSize": 16
+  },
+  "width": 500,
+  "height": 500,
+  "data": {
+    "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"
+  },
+  "transform": [
+    {
+      "calculate": "datum.pop_densit < 1000 ? 'Low Density' : datum.pop_densit < 3000 ? 'Medium Density' : 'High Density'",
+      "as": "Density_Group"
+    },
+    {
+      "window": [{"op": "rank", "as": "rank"}],
+      "sort": [{"field": "Green_Pct", "order": "descending"}]
+    },
+    {
+      "filter": "datum.rank <= 10 || datum.rank >= (datum.total - 10)"
+    }
+  ],
+  "mark": {
+    "type": "bar",
+    "opacity": 1.0
+  },
+  "encoding": {
+    "y": {
+      "field": "lga_name_2",
+      "type": "ordinal",
+      "sort": "-x",
+      "title": "Local Government Area",
+      "axis": {"labelFontSize": 10}
+    },
+    "x": {
+      "field": "Green_Pct",
+      "type": "quantitative",
+      "title": "Green Space (%)",
+      "axis": {"grid": true}
+    },
+    "color": {
+      "field": "Density_Group",
+      "type": "nominal",
+      "title": "Density Category",
+      "scale": {"range": ["#e8f5e9", "#81c784", "#1b5e20"]}
+    },
+    "tooltip": [
+      {"field": "lga_name_2", "title": "LGA"},
+      {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"},
+      {"field": "pop_densit", "title": "Population Density (people/km²)", "format": ",.0f"},
+      {"field": "Density_Group", "title": "Density Category"}
+    ]
+  }
+};
+    
+    const densitySpec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "title": {"text": "Top and Bottom Victorian LGAs by Green Space (%)",
-        "subtitle": "Grouped by population density category (2024)",
-        "anchor": "start","fontSize": 16},
-      "width": 500,"height": 420,
+      "title": {"text": "Top & Bottom LGAs by Population Density (people/km²)", "fontSize": 16},
+      "width": 420,
+      "height": 400,
       "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"},
       "transform": [
         {"filter": "datum.state_name == 'Victoria'"},
-        {"filter": "isValid(datum.Green_Pct) && datum.Green_Pct > 0"},
-        {"calculate": "datum.pop_densit < 1000 ? 'Low Density' : datum.pop_densit < 3000 ? 'Medium Density' : 'High Density'",
-         "as": "Density_Group"},
-        {"window": [{"op": "rank","as": "rank"}],"sort": [{"field": "Green_Pct","order": "descending"}]},
-        {"filter": "datum.rank <= 10 || datum.rank >= (datum.total - 10)"}
+        {"filter": "isValid(datum.pop_densit) && datum.pop_densit > 0"},
+        {
+          "calculate": "datum.pop_densit < 1000 ? 'Low Density' : datum.pop_densit < 3000 ? 'Medium Density' : 'High Density'",
+          "as": "Density_Group"
+        },
+        {"window": [{"op": "rank", "as": "rank"}], "sort": [{"field": "pop_densit", "order": "descending"}]},
+        {"filter": "datum.rank <= 10"}
       ],
-      "mark": {"type": "bar","opacity": 1.0},
+      "mark": {"type": "bar", "cornerRadiusEnd": 3},
       "encoding": {
-        "y": {"field": "lga_name_2","type": "ordinal","sort": "-x","title": "Local Government Area",
-              "axis": {"labelFontSize": 10}},
-        "x": {"field": "Green_Pct","type": "quantitative","title": "Green Space (%)","axis": {"grid": true}},
-        "color": {"field": "Density_Group","type": "nominal","title": "Density Category",
-          "scale": {"range": ["#e8f5e9","#81c784","#1b5e20"]}},
+        "y": {"field": "lga_name_2", "type": "ordinal", "sort": "-x", "title": "LGA"},
+        "x": {"field": "pop_densit", "type": "quantitative", "title": "Population Density (people/km²)"},
+        "color": {"field": "Density_Group", "type": "nominal", "scale": {"range": ["#e8f5e9", "#81c784", "#1b5e20"]}},
         "tooltip": [
-          {"field": "lga_name_2","title": "LGA"},
-          {"field": "Green_Pct","title": "Green Space (%)","format": ".1f"},
-          {"field": "pop_densit","title": "Population Density (people/km²)","format": ".0f"},
-          {"field": "Density_Group","title": "Density Category"}
+          {"field": "lga_name_2", "title": "LGA"},
+          {"field": "pop_densit", "title": "Population Density", "format": ".0f"}
         ]
-      }
+      },
+      "config": {"axis": {"labelFontSize": 10, "titleFontSize": 11}}
     };
 
     const boxSpec = {
@@ -214,8 +327,6 @@
       "width": 450,"height": 400,
       "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"},
       "transform": [
-        {"filter": "datum.state_name == 'Victoria'"},
-        {"filter": "isValid(datum.Green_Pct) && datum.Green_Pct > 0"},
         {"calculate": "datum.pop_densit < 1000 ? 'Low Density' : datum.pop_densit < 3000 ? 'Medium Density' : 'High Density'",
          "as": "Density_Group"}
       ],
@@ -231,6 +342,7 @@
     vegaEmbed("#map", mapSpec, {actions:false});
     vegaEmbed("#scatter", scatterSpec, {actions:false});
     vegaEmbed("#bar", barSpec, {actions:false});
+    vegaEmbed("#density", densitySpec, {actions:false});
     vegaEmbed("#box", boxSpec, {actions:false});
   </script>
 </body>

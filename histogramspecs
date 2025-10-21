@@ -1,0 +1,14 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {"text": "Distribution of Green Space Across Victorian LGAs"},
+  "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"},
+  "transform": [{"filter": "datum.state_name == 'Victoria'"}],
+  "mark": "bar",
+  "encoding": {
+    "x": {"bin": true, "field": "Green_Pct", "title": "Green Space (%)"},
+    "y": {"aggregate": "count", "title": "Number of LGAs"},
+    "color": {"value": "#388e3c"}
+  },
+  "width": 600,
+  "height": 400
+}

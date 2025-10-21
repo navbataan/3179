@@ -1,0 +1,143 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+    "title": "Green Space Distribution by Density Group (Victoria, 2024)",
+    "data": {
+      "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"
+    },
+    "transform": [
+      {"filter": "datum.state_name == 'Victoria'"},
+      {"filter": "isValid(datum.Green_Pct) && datum.Green_Pct > 0"},
+      {
+        "calculate": "datum.pop_densit < 1000 ? 'Low Density' : datum.pop_densit < 3000 ? 'Medium Density' : 'High Density'",
+        "as": "Density_Group"
+      }
+    ],
+    "encoding": {
+      "y": {
+        "field": "Density_Group",
+        "type": "nominal",
+        "title": "Density Category",
+        "sort": ["Low Density", "Medium Density", "High Density"]
+      }
+    },
+    "layer": [
+      {
+        "transform": [
+          {
+            "aggregate": [
+              {"op": "q1", "field": "Green_Pct", "as": "q1"},
+              {"op": "q3", "field": "Green_Pct", "as": "q3"},
+              {"op": "min", "field": "Green_Pct", "as": "lower"},
+              {"op": "max", "field": "Green_Pct", "as": "upper"},
+              {"op": "median", "field": "Green_Pct", "as": "median"}
+            ],
+            "groupby": ["Density_Group"]
+          }
+        ],
+        "mark": {"type": "rule", "strokeWidth": 1},
+        "encoding": {
+          "x": {"field": "lower", "type": "quantitative", "title": "Green Space (%)"},
+          "x2": {"field": "upper"},
+          "color": {
+            "field": "Density_Group",
+            "type": "nominal",
+            "scale": {"scheme": "set2"},
+            "legend": null
+          },
+          "tooltip": [
+            {"field": "Density_Group", "title": "Density Category"},
+            {"field": "lower", "title": "Min (%)", "format": ".1f"},
+            {"field": "upper", "title": "Max (%)", "format": ".1f"},
+            {"field": "median", "title": "Median (%)", "format": ".1f"}
+          ]
+        }
+      },
+      {
+        "transform": [
+          {
+            "aggregate": [
+              {"op": "q1", "field": "Green_Pct", "as": "q1"},
+              {"op": "q3", "field": "Green_Pct", "as": "q3"}
+            ],
+            "groupby": ["Density_Group"]
+          }
+        ],
+        "mark": {"type": "bar", "size": 14, "stroke": "black", "strokeWidth": 0.5},
+        "encoding": {
+          "x": {"field": "q1", "type": "quantitative"},
+          "x2": {"field": "q3"},
+          "color": {
+            "field": "Density_Group",
+            "type": "nominal",
+            "scale": {"scheme": "set2"},
+            "legend": null
+          },
+          "tooltip": [
+            {"field": "Density_Group", "title": "Density Category"},
+            {"field": "q1", "title": "Q1 (25th %)", "format": ".1f"},
+            {"field": "q3", "title": "Q3 (75th %)", "format": ".1f"}
+          ]
+        }
+      },
+      {
+        "transform": [
+          {
+            "aggregate": [
+              {"op": "median", "field": "Green_Pct", "as": "median"}
+            ],
+            "groupby": ["Density_Group"]
+          }
+        ],
+        "mark": {"type": "tick", "color": "white", "size": 14},
+        "encoding": {
+          "x": {"field": "median", "type": "quantitative"},
+          "tooltip": [
+            {"field": "Density_Group", "title": "Density Category"},
+            {"field": "median", "title": "Median (%)", "format": ".1f"}
+          ]
+        }
+      },
+      {
+        "transform": [
+          {
+            "aggregate": [
+              {"op": "q1", "field": "Green_Pct", "as": "q1"},
+              {"op": "q3", "field": "Green_Pct", "as": "q3"},
+              {"op": "stdev", "field": "Green_Pct", "as": "sd"}
+            ],
+            "groupby": ["Density_Group"]
+          },
+          {
+            "calculate": "datum.q3 + 1.5 * datum.sd",
+            "as": "upperFence"
+          },
+          {
+            "calculate": "datum.q1 - 1.5 * datum.sd",
+            "as": "lowerFence"
+          }
+        ],
+        "mark": {
+          "type": "point",
+          "filled": true,
+          "color": "black",
+          "opacity": 0.7,
+          "size": 40
+        },
+        "encoding": {
+          "x": {"field": "upperFence", "type": "quantitative"},
+          "tooltip": [
+            {"field": "Density_Group", "title": "Density Category"},
+            {"field": "upperFence", "title": "Upper Fence (approx.)", "format": ".1f"},
+            {"field": "lowerFence", "title": "Lower Fence (approx.)", "format": ".1f"}
+          ]
+        }
+      }
+    ],
+    "width": 450,
+    "height": 400,
+    "config": {
+      "view": {"stroke": "transparent"},
+      "axis": {"labelFontSize": 10, "titleFontSize": 11}
+    }
+  }
+  

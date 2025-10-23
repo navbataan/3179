@@ -13,7 +13,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
   <style>
-    :root {
+    :root{
       --bg:#0e0f12;
       --panel:#ffffff;
       --ink:#1a1a1a;
@@ -24,47 +24,46 @@
     }
 
     html, body {
-      height:100%;
-      margin:0;
-      background:url("background.pdf") no-repeat center center fixed;
-      background-size:cover;
-      background-color:#0e0f12;
-      font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size:16px;
-      line-height:1.55;
-      color:#111;
-    }
-
-    .wrap {max-width:1100px;margin:0 auto;padding:24px 16px 80px;}
+        height: 100%;
+        margin: 0;
+        background: url("background.pdf") no-repeat center center fixed;
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #0e0f12; /* fallback color */
+        color: #111;
+        font: 16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px 16px 80px;}
 
     .hero {
-        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-        border-radius: var(--radius);
-        padding: 40px 24px;
-        margin-bottom: 32px;
-        color: #fff;
-        box-shadow: var(--shadow);
-        text-align: center;           /* Center all text */
-        }
+      background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+      border-radius: var(--radius);
+      padding: 40px 24px;
+      margin-bottom: 32px;
+      color: #fff;
+      box-shadow: var(--shadow);
+      text-align: center;           /* Center all text */
+    }
 
     .hero h1 {
-        margin: 0 0 12px;
-        font-size: 2.2rem;
-        line-height: 1.3;
-        font-family: Helvetica, Arial, sans-serif;
+      margin: 0 0 12px;
+      font-size: 2.2rem;
+      line-height: 1.3;
+      font-family: Helvetica, Arial, sans-serif;
     }
 
     .hero p {
-        color: #d6d9de;
-        font-size: 1.1rem;
-        max-width: 850px;
-        margin: 0 auto;
-        line-height: 1.6;
-        font-family: Helvetica, Arial, sans-serif;
+      color: #d6d9de;
+      font-size: 1.1rem;
+      max-width: 850px;
+      margin: 0 auto;
+      line-height: 1.6;
+      font-family: Helvetica, Arial, sans-serif;
     }
 
-
-    .card {
+    .card{
       background:var(--panel);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
@@ -76,39 +75,50 @@
       justify-content:space-between;
       gap:40px;
     }
+    .card.reverse{flex-direction:row-reverse;}
 
-    .card.reverse {flex-direction:row-reverse;}
-
-    .chart {
+    .chart{
       flex:1 1 48%;
-      min-width:340px;
-      min-height:320px;
+      min-width:340px;       
+      min-height:320px;      
+      max-width:100%;
       border-radius:12px;
       background:#fafafa;
       border:1px solid #eee;
       overflow:hidden;
     }
 
-    .textbox {flex:1 1 40%;min-width:340px;}
-    .textbox h2 {font-size:18px;font-weight:600;margin:0 0 8px;color:var(--ink);}
-    .textbox p {font-size:15px;color:var(--ink-sub);margin:8px 0;}
-    .kicker {text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:700;font-size:13px;}
+    .textbox{flex:1 1 40%;min-width:340px;}
+    .textbox h2{margin:0 0 8px;color:var(--ink);line-height:1.25;font-size:1.4rem;}
+    .textbox p{color:var(--ink-sub);margin:8px 0;}
+    .kicker{text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:700;font-size:.78rem;}
 
-    .twins {display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between;}
-    .twins > div.chart {flex:1 1 48%;min-width:460px;}
+    .twins {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: space-between;
+    }
 
-    footer {
+    .twins > div.chart {
+    flex: 1 1 48%;
+    min-width: 460px;  
+    }
+
+    @media(max-width:640px){.twins{grid-template-columns:1fr;}}
+
+    footer{
       background:var(--panel);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
       padding:32px 40px;
       margin-top:60px;
       border-top:4px solid #e5e7eb;
-      font-family:Helvetica,Arial,sans-serif;
     }
 
-    .vega-actions,.vega-bind-name {font-size:13px;}
-    .vega-embed .vega-bind label {font-size:13px;}
+    /* --- Fix long Vega titles --- */
+    .vega-actions, .vega-bind-name {font-size:0.9rem;}
+    .vega-embed .vega-bind label {font-size:0.9rem;}
     text {white-space:pre-wrap !important;}
   </style>
 </head>
@@ -117,44 +127,51 @@
   <div class="wrap">
     <header class="hero">
       <h1>Green Space vs. Population Density in Melbourne & Surrounds (2024)</h1>
-      <p>Exploring how green space varies across Melbourne’s suburbs, from the dense inner city to the leafy outer regions, and how these patterns reveal the balance between population growth and liveability.</p>
+      <p>Exploring how green space varies across Melbourne"s suburbs, from the dense inner city to the leafy outer regions, and how these patterns reveal the balance between population growth and liveability.</p>
     </header>
+
 
     <section class="card">
       <div class="chart" id="chart-map"></div>
       <div class="textbox">
         <div class="kicker">1 · Mapping the City</div>
-        <h2>Where is Melbourne’s Green Space?</h2>
-        <p>This map sets the scene. Darker blue tones show higher population density, while the green circles scale with the proportion of green space in each Local Government Area (LGA).</p>
+        <h2>Where is Melbourne"s Green Space?</h2>
+        <p>This map sets the scene. Darker blue tones show higher population density, while the green circles scale with the proportion of green space in each Local Government Area (LGA). Notice how the centre of Melbourne is tightly packed, with smaller circles indicating less green space, while the outer LGAs, like Yarra Ranges or Mornington Peninsula, feature larger green markers and lower population density.</p>
+        <p>Hover over the circles to see exact values for each area, and begin to sense how green space and density balance across the metropolitan region.</p>
       </div>
     </section>
 
+ 
     <section class="card reverse">
       <div class="textbox">
         <div class="kicker">2 · Relationship</div>
         <h2>Do Denser Areas Have Less Green?</h2>
-        <p>Each dot here represents one Victorian LGA. On the x-axis is population density, and on the y-axis is the share of green space.</p>
+        <p>Each dot here represents one Victorian LGA. On the x-axis is population density, and on the y-axis is the share of green space. A clear pattern emerges: as density rises, green space tends to fall. The grey dashed line marks the approximate state-wide average of 20% green cover.</p>
+        <p>Hover to explore different LGAs, you"ll find that outer suburbs and regional councils cluster towards the top left (low density, high green space), while inner-city LGAs sit near the bottom right (high density, limited greenery).</p>
       </div>
       <div class="chart" id="chart-scatter"></div>
     </section>
 
+
     <section class="card">
-      <div class="twins">
-        <div id="chart-bars-top" class="chart"></div>
-        <div id="chart-bars-bottom" class="chart"></div>
-      </div>
-      <div class="textbox" style="margin-top:20px;">
-        <div class="kicker">3 · Who Leads and Who Lags?</div>
-        <h2>Which LGAs Stand Out?</h2>
-        <p>These charts reveal the top and bottom LGAs by both green space and population density.</p>
-      </div>
-    </section>
+        <div class="twins">
+          <div id="chart-bars-top" class="chart"></div>
+          <div id="chart-bars-bottom" class="chart"></div>
+        </div>
+        
+        <div class="textbox" style="margin-top:20px;">
+          <div class="kicker">3 · Who Leads and Who Lags?</div>
+          <h2>Which LGAs Stand Out?</h2>
+          <p>These charts reveal the top and bottom LGAs, by both green space and population density. Notice how coastal and outer areas often dominate the green-space leaderboard, while inner LGAs like Melbourne and Yarra sit among the most densely populated. This contrast highlights the trade-offs between accessibility, housing pressure, and open space availability.</p>
+        </div>
+      </section>
 
     <section class="card reverse">
       <div class="textbox">
         <div class="kicker">4 · Distribution</div>
         <h2>How Is Green Space Distributed?</h2>
-        <p>The box plot summarises how green space varies within density groups. The histogram shows that most LGAs cluster around moderate green space coverage.</p>
+        <p>The box plot summarises how green space varies within low-, medium-, and high-density LGAs. The wide range within low-density areas reflects Melbourne"s mix of semi-rural and suburban landscapes.</p>
+        <p>Below it, the histogram shows the full distribution, most LGAs have moderate green space coverage, but a few outliers stand out as exceptionally green or extremely built-up.</p>
       </div>
       <div class="chart" id="chart-box"></div>
     </section>
@@ -163,158 +180,141 @@
       <div class="chart" id="chart-hist"></div>
       <div class="textbox">
         <div class="kicker">5 · The Bigger Picture</div>
-        <h2>Understanding Melbourne’s Balance</h2>
-        <p>From dense inner cores to spacious green belts, these visuals highlight Melbourne’s diversity and the trade-off between growth and open space.</p>
+        <h2>Understanding Melbourne"s Balance</h2>
+        <p>Seeing all LGAs together, we get a sense of Melbourne"s diversity, from dense inner cores to spacious green belts. The story these visuals tell is one of contrast and compromise: the need to protect green space while accommodating a growing population. The data reminds us that urban sustainability is not just about numbers, it"s about livability, equity, and access to nature.</p>
       </div>
     </section>
 
-    <footer>
-      <h2 style="margin-top:0;font-size:18px;">Metadata & Acknowledgements</h2>
-      <p><strong>References (APA 7th)</strong></p>
-      <ul style="margin-top:0;font-size:15px;">
-        <li>Australian Bureau of Statistics. (2024). <em>Regional Population Density Data 2024 [Dataset]</em>. https://www.abs.gov.au</li>
-        <li>Victorian Planning Authority. (2024). <em>Victorian Green Space and Urban Land Use Data 2024 [Dataset]</em>. https://vpa.vic.gov.au</li>
-        <li>Department of Environment, Land, Water and Planning. (2024). <em>VicMap Administrative Boundaries [Spatial Data]</em>. https://www.land.vic.gov.au</li>
-      </ul>
-      <p><strong>AI Assistance Statement:</strong><br>
-      Parts of this project (including code debugging and visualisation layout refinement) were developed with the assistance of OpenAI’s GPT-5 model (ChatGPT, 2025). All interpretations and final design decisions are the author’s own.</p>
-      <p style="text-align:right;color:#777;margin-top:30px;font-size:14px;">Author: Navneet Bataan (2025)</p>
-    </footer>
-  </div>
-
-  <!-- Vega-Lite charts -->
-  <script>
-    const opts = { actions:false, renderer:"canvas", tooltip:true };
-    const BARS_WIDTH = 480;
-
-    const fitSpec = (spec,h=null,w=null)=>{
-      const s=JSON.parse(JSON.stringify(spec));
-      s.autosize={type:"fit",contains:"padding"};
-      s.width=w||"container"; if(h!=null) s.height=h;
-      s.config=s.config||{};
-      s.config.axis={labelFont:"Helvetica",titleFont:"Helvetica",labelFontSize:12,titleFontSize:13};
-      s.config.legend={labelFont:"Helvetica",titleFont:"Helvetica",labelFontSize:12,titleFontSize:13};
-      s.config.title={font:"Helvetica",fontSize:18,subtitleFont:"Helvetica",subtitleFontSize:14};
-      return s;
-    };
-
-    const MAP_SPEC= {
-        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": 800,
-        "height": 680,
-        "title": {
-            "text": "Melbourne and Surroundings: Population Density and Green Space (2024)",
-            "subtitle": "Choropleth = population density (people/km²), Circles = green space (%)",
-            "font": "Helvetica",
-            "fontSize": 18,
-            "anchor": "middle",
-            "offset": 10
-        },
-        "projection": {
-            "type": "mercator",
-            "center": [145.15, -37.8],
-            "scale": 68000,
-            "translate": [400, 360]
-        },
-        "padding": {"bottom": 40},
-        "layer": [
-            {
-            // Base map (population density)
-            "data": {
-                "url": "https://raw.githubusercontent.com/navbataan/3179/main/green_space_vic.json",
-                "format": {"type": "topojson", "feature": "green_space_vic"}
-            },
-            "transform": [{"filter": "datum.properties.state_name_2021 == 'Victoria'"}],
-            "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.6},
-            "encoding": {
-                "color": {
-                "field": "properties.pop_density_2024_people_per_km2",
-                "type": "quantitative",
-                "title": "Population Density (people/km²)",
-                "scale": {"scheme": "blues"}
-                },
-                "tooltip": [
-                {"field": "properties.lga_name_2024", "title": "Local Government Area"},
-                {"field": "properties.pop_density_2024_people_per_km2",
-                "title": "Population Density (people/km²)", "format": ",.0f"}
-                ]
-            }
-            },
-            {
-            // Green space circles
-            "data": {
-                "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"
-            },
-            "transform": [{"filter": "datum.state_name == 'Victoria'"}],
-            "mark": {
-                "type": "circle",
-                "color": "darkgreen",
-                "stroke": "white",
-                "strokeWidth": 0.8,
-                "opacity": 0.8
-            },
-            "encoding": {
-                "longitude": {"field": "X", "type": "quantitative"},
-                "latitude": {"field": "Y", "type": "quantitative"},
-                "size": {
-                "field": "Green_Pct",
-                "type": "quantitative",
-                "title": "Green Space (%)",
-                "scale": {"domain": [0, 100], "range": [30, 1500]},
-                "legend": {"symbolFillColor": "darkgreen"}
-                },
-                "tooltip": [
-                {"field": "lga_name_2", "title": "Local Government Area"},
-                {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"}
-                ]
-            }
-            },
-            {
-            // Optional annotation on the map for context
-            "mark": {"type": "text", "font": "Helvetica", "fontSize": 12, "color": "#1a1a1a"},
-            "encoding": {
-                "longitude": {"datum": 145.2},
-                "latitude": {"datum": -37.95},
-                "text": {"value": "Outer LGAs → more green space, lower density"}
-            }
-            },
-            {
-            "mark": {"type": "text", "font": "Helvetica", "fontSize": 12, "color": "#1a1a1a"},
-            "encoding": {
-                "longitude": {"datum": 144.95},
-                "latitude": {"datum": -37.8},
-                "text": {"value": "← Inner Melbourne: high density, limited green"}
-            }
-            }
-        ],
-        "config": {
-            "background": "white",
-            "font": "Helvetica",
-            "view": {"stroke": "transparent"},
-            "axis": {
-            "labelFont": "Helvetica",
-            "titleFont": "Helvetica",
-            "labelFontSize": 11,
-            "titleFontSize": 12
-            },
-            "legend": {
-            "orient": "bottom",
-            "direction": "horizontal",
-            "titleFont": "Helvetica",
-            "labelFont": "Helvetica",
-            "titleFontSize": 12,
-            "labelFontSize": 10,
-            "labelLimit": 200,
-            "symbolSize": 100
-            }
+    <script>
+        const fitSpec = (spec, h = null, w = null) => {
+        const clone = JSON.parse(JSON.stringify(spec));
+        clone.autosize = { type: "fit", contains: "padding" };
+        clone.width = w || "container";
+        if (h != null) clone.height = h;
+        if (clone.title && clone.title.fontSize && clone.title.fontSize > 18)
+        clone.title.fontSize = 16; // reduce oversized titles
+        if (clone.projection && clone.projection.translate) {
+        delete clone.projection.translate;
         }
-        }; 
-
-    const SCATTER_SPEC={
+        return clone;
+    };
+      const MAP_SPEC = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 800,
+      "height": 680,
+      "title": {
+        "text": "Melbourne and Surroundings: Population Density and Green Space (2024)",
+        "subtitle": "Choropleth = population density (people/km²), Circles = green space (%)",
+        "font": "Helvetica",
+        "fontSize": 18,
+        "anchor": "middle",
+        "offset": 10
+      },
+      "projection": {
+        "type": "mercator",
+        "center": [145.05, -37.8],
+        "scale": 35000,
+        "translate": [400, 360]
+      },
+      "padding": {"bottom": 40},
+      "layer": [
+        {
+          // Base map (population density)
+          "data": {
+            "url": "https://raw.githubusercontent.com/navbataan/3179/main/green_space_vic.json",
+            "format": {"type": "topojson", "feature": "green_space_vic"}
+          },
+          "transform": [{"filter": "datum.properties.state_name_2021 == 'Victoria'"}],
+          "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.6},
+          "encoding": {
+            "color": {
+              "field": "properties.pop_density_2024_people_per_km2",
+              "type": "quantitative",
+              "title": "Population Density (people/km²)",
+              "scale": {"scheme": "blues"}
+            },
+            "tooltip": [
+              {"field": "properties.lga_name_2024", "title": "Local Government Area"},
+              {"field": "properties.pop_density_2024_people_per_km2",
+              "title": "Population Density (people/km²)", "format": ",.0f"}
+            ]
+          }
+        },
+        {
+          // Green space circles
+          "data": {
+            "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"
+          },
+          "transform": [{"filter": "datum.state_name == 'Victoria'"}],
+          "mark": {
+            "type": "circle",
+            "color": "darkgreen",
+            "stroke": "white",
+            "strokeWidth": 0.8,
+            "opacity": 0.8
+          },
+          "encoding": {
+            "longitude": {"field": "X", "type": "quantitative"},
+            "latitude": {"field": "Y", "type": "quantitative"},
+            "size": {
+              "field": "Green_Pct",
+              "type": "quantitative",
+              "title": "Green Space (%)",
+              "scale": {"domain": [0, 100], "range": [30, 1500]},
+              "legend": {"symbolFillColor": "darkgreen"}
+            },
+            "tooltip": [
+              {"field": "lga_name_2", "title": "Local Government Area"},
+              {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"}
+            ]
+          }
+        },
+        {
+          // Optional annotation on the map for context
+          "mark": {"type": "text", "font": "Helvetica", "fontSize": 12, "color": "#1a1a1a"},
+          "encoding": {
+            "longitude": {"datum": 145.2},
+            "latitude": {"datum": -37.95},
+            "text": {"value": "Outer LGAs = more green space, lower density"}
+          }
+        },
+        {
+          "mark": {"type": "text", "font": "Helvetica", "fontSize": 12, "color": "#1a1a1a"},
+          "encoding": {
+            "longitude": {"datum": 144.95},
+            "latitude": {"datum": -37.8},
+            "text": {"value":  "Inner Melbourne= high density, limited green"}
+          }
+        }
+      ],
+      "config": {
+        "background": "white",
+        "font": "Helvetica",
+        "view": {"stroke": "transparent"},
+        "axis": {
+          "labelFont": "Helvetica",
+          "titleFont": "Helvetica",
+          "labelFontSize": 11,
+          "titleFontSize": 12
+        },
+        "legend": {
+          "orient": "bottom",
+          "direction": "horizontal",
+          "titleFont": "Helvetica",
+          "labelFont": "Helvetica",
+          "titleFontSize": 12,
+          "labelFontSize": 10,
+          "labelLimit": 200,
+          "symbolSize": 100
+        }
+      }
+    };
+  
+      const SCATTER_SPEC = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "title": {
             "text": "Green Space (%) vs Population Density (people/km²) for Victoria LGAs",
-            "subtitle": "Each dot represents a Victorian Local Government Area (2024)",
+            "subtitle": "Each dot represents a specific Victorian Local Government Area",
             "fontSize": 18,
             "anchor": "middle"
         },
@@ -333,6 +333,7 @@
         }],
         "transform": [{"filter": "Region == 'All' || datum.Region == Region"}],
         "layer": [
+            // Base scatter plot
             {
             "mark": {"type": "circle", "color": "#006400", "opacity": 0.75, "size": 250},
             "encoding": {
@@ -382,10 +383,11 @@
             "axis": {"labelFontSize": 11, "titleFontSize": 12},
             "legend": {"orient": "bottom"}
         }
-        }; 
-    
-    // === BAR TOP ===
-    const BARS_TOP_SPEC={
+        };
+
+
+  
+      const BARS_TOP_SPEC = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "title": {"text": "Top and Bottom Victorian LGAs by Green Space (%)",
                     "subtitle": "Grouped by population density category (2024)",
@@ -434,10 +436,10 @@
             }
         ],
         "config": {"legend": {"orient": "bottom"}}
-        }; // (your top green-space annotated bar chart)
+        };
 
-    // === BAR BOTTOM ===
-    const BARS_BOT_SPEC={
+  
+      const BARS_BOT_SPEC = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "title": {"text": "Top & Bottom Victorian LGAs by Population Density (people/km²)",
                     "subtitle": "Grouped by population density category (2024)",
@@ -487,10 +489,9 @@
             }
         ],
         "config": {"legend": {"orient": "bottom"}}
-        }; // (your population-density annotated bar chart)
+        };
 
-    // === BOX ===
-    const BOX_SPEC={
+      const BOX_SPEC = {
         "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
         "title": "Green Space Distribution by Density Group (Victoria, 2024)",
         "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"},
@@ -567,10 +568,10 @@
         ],
         "width": 450,"height": 400,
         "config": {"view": {"stroke": "transparent"},"legend": {"orient": "bottom"}}
-        }; // (your final box plot with compact annotations)
+        };
 
-    // === HIST ===
-    const HIST_SPEC={
+
+    const HIST_SPEC = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "title": {"text": "Distribution of Green Space Across Victorian LGAs"},
         "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"},
@@ -605,16 +606,43 @@
         ],
         "width": 600,"height": 400,
         "config": {"legend": {"orient": "bottom"}}
-        }; // (your histogram with annotations)
+        };
 
-    // embed all
-    const embed=(sel,spec,h,w)=>vegaEmbed(sel,fitSpec(spec,h,w),opts).catch(console.error);
-    embed("#chart-map",MAP_SPEC,460);
-    embed("#chart-scatter",SCATTER_SPEC,360);
-    embed("#chart-bars-top",BARS_TOP_SPEC,340,BARS_WIDTH);
-    embed("#chart-bars-bottom",BARS_BOT_SPEC,340,BARS_WIDTH);
-    embed("#chart-box",BOX_SPEC,320);
-    embed("#chart-hist",HIST_SPEC,320);
-  </script>
+   
+  /* ========================
+     Vega-Lite Specifications
+     ======================== */
+
+     const opts = { actions: false, renderer: "canvas", tooltip: true };
+  const BARS_WIDTH = 480;
+
+  const embed = (sel, spec, h, w) =>
+    vegaEmbed(sel, fitSpec(spec, h, w), opts).catch(console.error);
+
+  // --- Embed charts (all working again) ---
+  embed("#chart-map", MAP_SPEC, 460);
+  embed("#chart-scatter", SCATTER_SPEC, 360);
+  embed("#chart-bars-top", BARS_TOP_SPEC, 340, BARS_WIDTH);
+  embed("#chart-bars-bottom", BARS_BOT_SPEC, 340, BARS_WIDTH);
+  embed("#chart-box", BOX_SPEC, 320);
+  embed("#chart-hist", HIST_SPEC, 320);
+
+</script>
+<footer>
+    <h2 style="margin-top:0;">Metadata & Acknowledgements</h2>
+    <p><strong>References (APA 7th)</strong></p>
+    <ul style="margin-top:0;">
+      <li>Australian Bureau of Statistics (2024). *Regional Population Density Data 2024 [Dataset]*. https://www.abs.gov.au</li>
+      <li>Victorian Planning Authority (2024). *Victorian Green Space and Urban Land Use Data 2024 [Dataset]*. https://vpa.vic.gov.au</li>
+      <li>Department of Environment, Land, Water and Planning (2024). *VicMap Administrative Boundaries [Spatial Data]*. https://www.land.vic.gov.au</li>
+    </ul>
+  
+    <p><strong>AI Assistance Statement:</strong><br>
+    Parts of this project (including code debugging and visualisation layout refinement) were developed with the assistance of OpenAI’s GPT-5 model (ChatGPT, 2025). All interpretations and final design decisions are the author’s own.</p>
+  
+    <p style="text-align:right;color:#777;margin-top:30px;">
+      Author: Navneet Bataan (2025)
+    </p>
+  </footer>  
 </body>
 </html>

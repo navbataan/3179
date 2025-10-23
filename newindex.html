@@ -199,18 +199,6 @@
     </section>
 
     <script>
-        const fitSpec = (spec, h = null, w = null) => {
-        const clone = JSON.parse(JSON.stringify(spec));
-        clone.autosize = { type: "fit", contains: "padding" };
-        clone.width = w || "container";
-        if (h != null) clone.height = h;
-        if (clone.title && clone.title.fontSize && clone.title.fontSize > 18)
-        clone.title.fontSize = 16; 
-        if (clone.projection && clone.projection.translate) {
-        delete clone.projection.translate;
-        }
-        return clone;
-    };
       const MAP_SPEC = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
       "width": 800,

@@ -351,28 +351,28 @@
             "transform": [{"filter": "Region != 'Regional'"}],
             "mark": {"type": "text", "color": "darkgreen", "fontSize": 12, "dx": 10, "dy": -10},
             "encoding": {
-                "x": {"datum": 5000},
-                "y": {"datum": 15},
-                "text": {"value": "Inner-city LGAs: high density, low green space"}
+                "x": {"datum": 4000},
+                "y": {"datum": 35},
+                "text": {"value": "Inner-city LGAs = high density, low green space"}
             }
             },
             {
             "transform": [{"filter": "Region != 'Regional'"}],
             "mark": {"type": "text", "color": "#2f855a", "fontSize": 12, "dx": 10, "dy": -10},
             "encoding": {
-                "x": {"datum": 300},
+                "x": {"datum": 1000},
                 "y": {"datum": 45},
-                "text": {"value": "Outer suburbs: more green space per capita"}
+                "text": {"value": "Outer suburbs = more green space per capita"}
             }
             },
 
             {
             "transform": [{"filter": "Region == 'Regional'"}],
-            "mark": {"type": "text", "color": "#1a202c", "fontSize": 13, "fontWeight": "bold", "dx": 10, "dy": -10},
+            "mark": {"type": "text", "color": "#2f855a", "fontSize": 12, "dx": 10, "dy": -10},
             "encoding": {
-                "x": {"datum": 600},
-                "y": {"datum": 40},
-                "text": {"value": "Regional LGAs show greater variation in green space\nreflecting diverse landscapes and land use patterns."}
+                "x": {"datum": 2000},
+                "y": {"datum": 20},
+                "text": {"value": "Regional LGAs can have different ways of using open space."}
             }
             }
         ],
@@ -422,15 +422,15 @@
             "encoding": {
                 "x": {"datum": 35},
                 "y": {"datum": "Yarra Ranges"},
-                "text": {"value": "Outer LGAs: abundant open space"}
+                "text": {"value": "Outer LGAs = abundant open space"}
             }
             },
             {
             "mark": {"type": "text","color": "#b91c1c","fontSize": 12,"fontWeight": "bold"},
             "encoding": {
-                "x": {"datum": 8},
+                "x": {"datum": 20},
                 "y": {"datum": "Melbourne"},
-                "text": {"value": "Inner LGAs: scarce green cover"}
+                "text": {"value": "Inner LGAs = scarce green cover"}
             }
             }
         ],
@@ -473,17 +473,17 @@
             {
             "mark": {"type": "text","color": "#1a202c","fontSize": 12,"fontWeight": "bold"},
             "encoding": {
-                "x": {"datum": 5000},
+                "x": {"datum": 3000},
                 "y": {"datum": "Melbourne"},
-                "text": {"value": "Urban core: extremely dense"}
+                "text": {"value": "Urban core = very high density"}
             }
             },
             {
             "mark": {"type": "text","color": "#2f855a","fontSize": 12,"fontWeight": "bold"},
             "encoding": {
-                "x": {"datum": 200},
+                "x": {"datum": 2000},
                 "y": {"datum": "Yarra Ranges"},
-                "text": {"value": "Outer regions: low density, more space"}
+                "text": {"value": "Outer regions = low density, more space"}
             }
             }
         ],
@@ -550,7 +550,7 @@
             {
             "mark": {"type": "text","color": "#1a202c","fontSize": 12,"fontWeight": "bold","dx": 10,"dy": -10},
             "encoding": {
-                "x": {"datum": 55},
+                "x": {"datum": 20},
                 "y": {"datum": "Low Density"},
                 "text": {"value": "Wide spread =\nSemi-rural and suburban mix"}
             }
@@ -558,7 +558,7 @@
             {
             "mark": {"type": "text","color": "#2f855a","fontSize": 12,"dx": 10,"dy": -10},
             "encoding": {
-                "x": {"datum": 25},
+                "x": {"datum": 20},
                 "y": {"datum": "High Density"},
                 "text": {"value": "Tight range =\nLimited green space"}
             }
@@ -589,15 +589,15 @@
             "mark": {"type": "text", "color": "#1a202c", "fontSize": 12, "fontWeight": "bold"},
             "encoding": {
                 "x": {"datum": 20},
-                "y": {"datum": 18},
+                "y": {"datum": 9},
                 "text": {"value": "Most LGAs fall between\n10–30% green space"}
             }
             },
             {
-            "mark": {"type": "text", "color": "#2f855a", "fontSize": 11, "dx": 10},
+            "mark": {"type": "text", "color": "#2f855a", "fontSize": 11, "fontWeight": "bold", "dx": 10},
             "encoding": {
-                "x": {"datum": 60},
-                "y": {"datum": 8},
+                "x": {"datum": 50},
+                "y": {"datum": 7},
                 "text": {"value": "A few LGAs have very high\ncoverage (outer regions)"}
             }
             }

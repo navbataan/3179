@@ -270,7 +270,6 @@
           }
         },
         {
-          // Optional annotation on the map for context
           "mark": {"type": "text", "font": "Helvetica", "fontSize": 12, "color": "#1a1a1a"},
           "encoding": {
             "longitude": {"datum": 145.2},
@@ -553,7 +552,7 @@
             "encoding": {
                 "x": {"datum": 55},
                 "y": {"datum": "Low Density"},
-                "text": {"value": "Wide spread →\nSemi-rural + suburban mix"}
+                "text": {"value": "Wide spread =\nSemi-rural and suburban mix"}
             }
             },
             {
@@ -561,7 +560,7 @@
             "encoding": {
                 "x": {"datum": 25},
                 "y": {"datum": "High Density"},
-                "text": {"value": "Tight range →\nLimited green space"}
+                "text": {"value": "Tight range =\nLimited green space"}
             }
             }
 
@@ -607,11 +606,6 @@
         "width": 600,"height": 400,
         "config": {"legend": {"orient": "bottom"}}
         };
-
-   
-  /* ========================
-     Vega-Lite Specifications
-     ======================== */
 
      const opts = { actions: false, renderer: "canvas", tooltip: true };
   const BARS_WIDTH = 480;

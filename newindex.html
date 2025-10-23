@@ -38,21 +38,31 @@
     .wrap {max-width:1100px;margin:0 auto;padding:24px 16px 80px;}
 
     .hero {
-      background:linear-gradient(180deg,#1a202c 0%,#0e0f12 100%);
-      border-radius:var(--radius);
-      padding:28px 24px;
-      margin-bottom:24px;
-      color:#fff;
-      box-shadow:var(--shadow);
-    }
+        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        border-radius: var(--radius);
+        padding: 40px 24px;
+        margin-bottom: 32px;
+        color: #fff;
+        box-shadow: var(--shadow);
+        text-align: center;           /* Center all text */
+        }
 
     .hero h1 {
-      font-size:24px;
-      font-weight:600;
-      margin:0 0 6px;
+        margin: 0 0 12px;
+        font-size: 2.2rem;
+        line-height: 1.3;
+        font-family: Helvetica, Arial, sans-serif;
     }
 
-    .hero p {color:#d0d4db;font-size:15px;}
+    .hero p {
+        color: #d6d9de;
+        font-size: 1.1rem;
+        max-width: 850px;
+        margin: 0 auto;
+        line-height: 1.6;
+        font-family: Helvetica, Arial, sans-serif;
+    }
+
 
     .card {
       background:var(--panel);
@@ -188,65 +198,117 @@
       return s;
     };
 
-    const MAP_SPEC={
+    const MAP_SPEC= {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": 800,
-        "height": 700,
+        "height": 680,
         "title": {
-          "text": "Melbourne and Surroundings: Population Density and Green Space (2024)",
-          "subtitle": "Choropleth = population density (people/km²), Circles = green space (%)",
-          "fontSize": 20,
-          "anchor": "middle",
-          "offset": 10
+            "text": "Melbourne and Surroundings: Population Density and Green Space (2024)",
+            "subtitle": "Choropleth = population density (people/km²), Circles = green space (%)",
+            "font": "Helvetica",
+            "fontSize": 18,
+            "anchor": "middle",
+            "offset": 10
         },
-        "projection": {"type": "mercator","center": [145.0, -37.5],"scale": 55000,"translate": [400, 50]},
+        "projection": {
+            "type": "mercator",
+            "center": [145.15, -37.8],
+            "scale": 68000,
+            "translate": [400, 360]
+        },
+        "padding": {"bottom": 40},
         "layer": [
-          {
+            {
+            // Base map (population density)
             "data": {
-              "url": "https://raw.githubusercontent.com/navbataan/3179/main/green_space_vic.json",
-              "format": {"type": "topojson", "feature": "green_space_vic"}
+                "url": "https://raw.githubusercontent.com/navbataan/3179/main/green_space_vic.json",
+                "format": {"type": "topojson", "feature": "green_space_vic"}
             },
             "transform": [{"filter": "datum.properties.state_name_2021 == 'Victoria'"}],
-            "mark": {"type": "geoshape","stroke": "white","strokeWidth": 0.5},
+            "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.6},
             "encoding": {
-              "color": {
+                "color": {
                 "field": "properties.pop_density_2024_people_per_km2",
                 "type": "quantitative",
                 "title": "Population Density (people/km²)",
                 "scale": {"scheme": "blues"}
-              },
-              "tooltip": [
+                },
+                "tooltip": [
                 {"field": "properties.lga_name_2024", "title": "Local Government Area"},
                 {"field": "properties.pop_density_2024_people_per_km2",
-                 "title": "Population Density (people/km²)", "format": ",.0f"}
-              ]
+                "title": "Population Density (people/km²)", "format": ",.0f"}
+                ]
             }
-          },
-          {
-            "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"},
+            },
+            {
+            // Green space circles
+            "data": {
+                "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"
+            },
             "transform": [{"filter": "datum.state_name == 'Victoria'"}],
-            "mark": {"type": "circle","color": "darkgreen","stroke": "white","strokeWidth": 0.7,"opacity": 0.75},
+            "mark": {
+                "type": "circle",
+                "color": "darkgreen",
+                "stroke": "white",
+                "strokeWidth": 0.8,
+                "opacity": 0.8
+            },
             "encoding": {
-              "longitude": {"field": "X","type": "quantitative"},
-              "latitude": {"field": "Y","type": "quantitative"},
-              "size": {
-                "field": "Green_Pct","type": "quantitative","title": "Green Space (%)",
+                "longitude": {"field": "X", "type": "quantitative"},
+                "latitude": {"field": "Y", "type": "quantitative"},
+                "size": {
+                "field": "Green_Pct",
+                "type": "quantitative",
+                "title": "Green Space (%)",
                 "scale": {"domain": [0, 100], "range": [30, 1500]},
                 "legend": {"symbolFillColor": "darkgreen"}
-              },
-              "tooltip": [
+                },
+                "tooltip": [
                 {"field": "lga_name_2", "title": "Local Government Area"},
                 {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"}
-              ]
+                ]
             }
-          }
+            },
+            {
+            // Optional annotation on the map for context
+            "mark": {"type": "text", "font": "Helvetica", "fontSize": 12, "color": "#1a1a1a"},
+            "encoding": {
+                "longitude": {"datum": 145.2},
+                "latitude": {"datum": -37.95},
+                "text": {"value": "Outer LGAs → more green space, lower density"}
+            }
+            },
+            {
+            "mark": {"type": "text", "font": "Helvetica", "fontSize": 12, "color": "#1a1a1a"},
+            "encoding": {
+                "longitude": {"datum": 144.95},
+                "latitude": {"datum": -37.8},
+                "text": {"value": "← Inner Melbourne: high density, limited green"}
+            }
+            }
         ],
         "config": {
-          "background": "white",
-          "view": {"stroke": "transparent"},
-          "legend": {"titleFontSize": 12, "labelFontSize": 10, "orient": "bottom"}
+            "background": "white",
+            "font": "Helvetica",
+            "view": {"stroke": "transparent"},
+            "axis": {
+            "labelFont": "Helvetica",
+            "titleFont": "Helvetica",
+            "labelFontSize": 11,
+            "titleFontSize": 12
+            },
+            "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "titleFont": "Helvetica",
+            "labelFont": "Helvetica",
+            "titleFontSize": 12,
+            "labelFontSize": 10,
+            "labelLimit": 200,
+            "symbolSize": 100
+            }
         }
-      }; 
+        }; 
 
     const SCATTER_SPEC={
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",

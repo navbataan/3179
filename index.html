@@ -520,36 +520,70 @@
           "as": "Density_Group"
         }
       ],
-      "mark": {
-        "type": "boxplot",
-        "extent": "min-max",   // shows whiskers for full min/max
-        "median": {"color": "black", "strokeWidth": 1.5},
-        "box": {"fillOpacity": 0.8, "stroke": "black", "strokeWidth": 1},
-        "outliers": {"size": 40, "color": "#2f855a"}
-      },
-      "encoding": {
-        "y": {
-          "field": "Density_Group",
-          "type": "nominal",
-          "title": "Density Category",
-          "sort": ["Low Density", "Medium Density", "High Density"]
+      "layer": [
+        {
+          "mark": {
+            "type": "boxplot",
+            "extent": "min-max",
+            "median": {"color": "black", "strokeWidth": 1.5},
+            "box": {"fillOpacity": 0.8, "stroke": "black", "strokeWidth": 1},
+            "outliers": {"size": 40, "color": "#2f855a"}
+          },
+          "encoding": {
+            "y": {
+              "field": "Density_Group",
+              "type": "nominal",
+              "title": "Density Category",
+              "sort": ["Low Density", "Medium Density", "High Density"]
+            },
+            "x": {
+              "field": "Green_Pct",
+              "type": "quantitative",
+              "title": "Green Space (%)"
+            },
+            "color": {
+              "field": "Density_Group",
+              "type": "nominal",
+              "scale": {"range": ["#c8e6c9", "#81c784", "#388e3c"]},
+              "legend": null
+            },
+            "tooltip": [
+              {"field": "Density_Group", "title": "Density Category"},
+              {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"}
+            ]
+          }
         },
-        "x": {
-          "field": "Green_Pct",
-          "type": "quantitative",
-          "title": "Green Space (%)"
+        {
+          "mark": {
+            "type": "text",
+            "color": "#1a202c",
+            "fontSize": 12,
+            "fontWeight": "bold",
+            "dx": 10,
+            "dy": -8
+          },
+          "encoding": {
+            "x": {"datum": 24},
+            "y": {"datum": "Low Density"},
+            "text": {"value": "Wide spread = Semi-rural and suburban mix"}
+          }
         },
-        "color": {
-          "field": "Density_Group",
-          "type": "nominal",
-          "scale": {"range": ["#c8e6c9", "#81c784", "#388e3c"]},
-          "legend": null
-        },
-        "tooltip": [
-          {"field": "Density_Group", "title": "Density Category"},
-          {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"}
-        ]
-      },
+        {
+          "mark": {
+            "type": "text",
+            "color": "#2f855a",
+            "fontSize": 12,
+            "fontWeight": "bold",
+            "dx": 10,
+            "dy": -8
+          },
+          "encoding": {
+            "x": {"datum": 24},
+            "y": {"datum": "High Density"},
+            "text": {"value": "Tight range = Limited green space"}
+          }
+        }
+      ],
       "width": 500,
       "height": 350,
       "config": {
@@ -606,7 +640,7 @@
         "config": {"legend": {"orient": "bottom"}}
         };
 
-     const opts = { actions: false, renderer: "canvas", tooltip: true };
+  const opts = { actions: false, renderer: "canvas", tooltip: true };
   const BARS_WIDTH = 480;
 
   const embed = (sel, spec, h, w) =>

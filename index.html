@@ -502,88 +502,66 @@
         };
 
       const BOX_SPEC = {
-        "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-        "title": {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": {
         "text": "Green Space Distribution by Density Group (Victoria, 2024)",
         "font": "Helvetica",
         "fontSize": 14,
         "anchor": "middle"
-    },
-        "data": {"url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"},
-        "transform": [
-            {"filter": "datum.state_name == 'Victoria'"},
-            {"filter": "isValid(datum.Green_Pct) && datum.Green_Pct > 0"},
-            {"calculate": "datum.pop_densit < 1000 ? 'Low Density' : datum.pop_densit < 3000 ? 'Medium Density' : 'High Density'",
-            "as": "Density_Group"}
-        ],
-        "encoding": {
-            "y": {"field": "Density_Group","type": "nominal","title": "Density Category",
-                "sort": ["Low Density","Medium Density","High Density"]}
+      },
+      "data": {
+        "url": "https://raw.githubusercontent.com/navbataan/3179/main/centroids_clean.csv"
+      },
+      "transform": [
+        {"filter": "datum.state_name == 'Victoria'"},
+        {"filter": "isValid(datum.Green_Pct) && datum.Green_Pct > 0"},
+        {
+          "calculate": "datum.pop_densit < 1000 ? 'Low Density' : datum.pop_densit < 3000 ? 'Medium Density' : 'High Density'",
+          "as": "Density_Group"
+        }
+      ],
+      "mark": {
+        "type": "boxplot",
+        "extent": "min-max",   // shows whiskers for full min/max
+        "median": {"color": "black", "strokeWidth": 1.5},
+        "box": {"fillOpacity": 0.8, "stroke": "black", "strokeWidth": 1},
+        "outliers": {"size": 40, "color": "#2f855a"}
+      },
+      "encoding": {
+        "y": {
+          "field": "Density_Group",
+          "type": "nominal",
+          "title": "Density Category",
+          "sort": ["Low Density", "Medium Density", "High Density"]
         },
-        "layer": [
-            {
-            "transform": [{
-                "aggregate": [
-                {"op": "q1","field": "Green_Pct","as": "q1"},
-                {"op": "q3","field": "Green_Pct","as": "q3"},
-                {"op": "min","field": "Green_Pct","as": "lower"},
-                {"op": "max","field": "Green_Pct","as": "upper"},
-                {"op": "median","field": "Green_Pct","as": "median"}
-                ],
-                "groupby": ["Density_Group"]
-            }],
-            "mark": {"type": "bar","size": 14,"stroke": "black","strokeWidth": 0.5},
-            "encoding": {
-                "x": {"field": "q1","type": "quantitative","title": "Green Space (%)"},
-                "x2": {"field": "q3"},
-                "y": {"field": "Density_Group","type": "nominal"},
-                "color": {"field": "Density_Group","type": "nominal","legend": null},
-                "tooltip": [
-                {"field": "Density_Group","title": "Density Category"},
-                {"field": "lower","title": "Min (%)","format": ".1f"},
-                {"field": "median","title": "Median (%)","format": ".1f"},
-                {"field": "upper","title": "Max (%)","format": ".1f"},
-                {"field": "q1","title": "Q1 (%)","format": ".1f"},
-                {"field": "q3","title": "Q3 (%)","format": ".1f"}
-                ]
-            }
-            },
-            {
-            "mark": {"type": "rule","color": "black"},
-            "encoding": {
-                "x": {"field": "lower","type": "quantitative"},
-                "x2": {"field": "upper"},
-                "y": {"field": "Density_Group","type": "nominal"}
-            }
-            },
-            {
-            "mark": {"type": "tick","color": "white","size": 14},
-            "encoding": {
-                "x": {"field": "median","type": "quantitative"},
-                "y": {"field": "Density_Group","type": "nominal"}
-            }
-            },
-            {
-            "mark": {"type": "text","color": "#1a202c","fontSize": 12,"fontWeight": "bold","dx": 10,"dy": -10},
-            "encoding": {
-                "x": {"datum": 20},
-                "y": {"datum": "Low Density"},
-                "text": {"value": "Wide spread =\nSemi-rural and suburban mix"}
-            }
-            },
-            {
-            "mark": {"type": "text","color": "#2f855a","fontSize": 12,"dx": 10,"dy": -10},
-            "encoding": {
-                "x": {"datum": 20},
-                "y": {"datum": "High Density"},
-                "text": {"value": "Tight range =\nLimited green space"}
-            }
-            }
-
-        ],
-        "width": 450,"height": 400,
-        "config": {"view": {"stroke": "transparent"},"legend": {"orient": "bottom"}}
-        };
+        "x": {
+          "field": "Green_Pct",
+          "type": "quantitative",
+          "title": "Green Space (%)"
+        },
+        "color": {
+          "field": "Density_Group",
+          "type": "nominal",
+          "scale": {"range": ["#c8e6c9", "#81c784", "#388e3c"]},
+          "legend": null
+        },
+        "tooltip": [
+          {"field": "Density_Group", "title": "Density Category"},
+          {"field": "Green_Pct", "title": "Green Space (%)", "format": ".1f"}
+        ]
+      },
+      "width": 500,
+      "height": 350,
+      "config": {
+        "view": {"stroke": "transparent"},
+        "axis": {
+          "labelFont": "Helvetica",
+          "titleFont": "Helvetica",
+          "labelFontSize": 11,
+          "titleFontSize": 12
+        }
+      }
+    };
 
 
     const HIST_SPEC = {
